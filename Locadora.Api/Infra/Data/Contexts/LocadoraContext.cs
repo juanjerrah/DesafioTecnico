@@ -9,4 +9,10 @@ public class LocadoraContext : DbContext
 
     public DbSet<Veiculo> Veiculos { get; set; } = default!;
     public DbSet<Evento> Eventos { get; set; } = default!;
+    
+    protected override void OnModelCreating(ModelBuilder modelBuilder)
+    {
+        base.OnModelCreating(modelBuilder);
+        modelBuilder.ApplyConfigurationsFromAssembly(typeof(LocadoraContext).Assembly);
+    }
 }
