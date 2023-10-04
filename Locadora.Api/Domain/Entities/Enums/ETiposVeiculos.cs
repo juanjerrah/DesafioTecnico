@@ -1,6 +1,6 @@
 ﻿namespace Locadora.Api.Domain.Entities.Enums;
 
-public enum TiposVeiculos
+public enum ETiposVeiculos
 {
     Hatch,
     Sedan,

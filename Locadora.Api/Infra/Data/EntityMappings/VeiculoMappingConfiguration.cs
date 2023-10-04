@@ -12,6 +12,9 @@ public class VeiculoMappingConfiguration : IEntityTypeConfiguration<Veiculo>
 
         builder.HasKey(v => v.Id)
             .HasName("PK_Vei_Veiculo");
+
+        builder.Property(x => x.Id)
+            .HasColumnName("Vei_VeiculoId");
         
         builder.Property(v => v.Placa)
             .HasColumnName("Vei_Placa")
@@ -24,6 +27,10 @@ public class VeiculoMappingConfiguration : IEntityTypeConfiguration<Veiculo>
         builder.Property(v => v.TipoVeiculo)
             .HasColumnName("Vei_Tipo")
             .IsRequired();
+
+        builder.HasOne(x => x.MovimentacoesVeiculo)
+            .WithMany(x => x.Veiculos)
+            .HasForeignKey(x => x.MovimentacoesVeiculo);
         
         builder.Ignore(x => x.ValidationResult);
         builder.Ignore(x => x.CascadeMode);

@@ -1,6 +1,6 @@
 ﻿namespace Locadora.Api.Domain.Entities.Enums;
 
-public enum StatusVeiculo
+public enum EStatusVeiculo
 {
     Disponivel,
     Locado

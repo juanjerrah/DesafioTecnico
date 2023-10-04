@@ -8,11 +8,11 @@ public class LocadoraContext : DbContext
     public LocadoraContext(DbContextOptions<LocadoraContext> options): base(options) { }
 
     public DbSet<Veiculo> Veiculos { get; set; } = default!;
-    public DbSet<Evento> Eventos { get; set; } = default!;
+    public DbSet<MovimentacoesVeiculo> MovimentacoesVeiculos { get; set; } = default!;
     
-    protected override void OnModelCreating(ModelBuilder modelBuilder)
+    /*protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
         base.OnModelCreating(modelBuilder);
         modelBuilder.ApplyConfigurationsFromAssembly(typeof(LocadoraContext).Assembly);
-    }
+    }*/
 }

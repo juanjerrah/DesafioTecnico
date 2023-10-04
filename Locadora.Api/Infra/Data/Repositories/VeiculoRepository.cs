@@ -1,32 +1,55 @@
 ﻿using Locadora.Api.Domain.Entities;
-using Locadora.Api.Domain.Repositories;
+using Locadora.Api.Domain.Interfaces;
+using Locadora.Api.Infra.Data.Contexts;
+using Microsoft.EntityFrameworkCore;
 
 namespace Locadora.Api.Infra.Data.Repositories;
 
 public class VeiculoRepository : IVeiculoRepository
 {
-    public Task<IEnumerable<Veiculo>> ObterVeiculos()
+    private readonly LocadoraContext _context;
+
+    public VeiculoRepository(LocadoraContext context)
     {
-        throw new NotImplementedException();
+        _context = context;
     }
 
-    public Task<Veiculo> ObterVeiculoPorPlaca(string placa)
+    public async Task<IEnumerable<Veiculo>> ObterVeiculos()
     {
-        throw new NotImplementedException();
+        var veiculos =  await _context.Veiculos
+            .Include(x => x.MovimentacoesVeiculo)
+            .ToListAsync();
+        
+        return veiculos;
     }
 
-    public Task InserirVeiculo(Veiculo veiculo)
+    public async Task<Veiculo?> ObterVeiculoPorPlaca(string placa)
     {
-        throw new NotImplementedException();
+        var veiculo = await _context.Veiculos
+            .Include(x => x.MovimentacoesVeiculo)
+            .FirstOrDefaultAsync(x => x.Placa.ToLower().Equals(placa.ToLower()));
+
+        return veiculo;
     }
 
-    public Task AtualizarVeiculo(Veiculo veiculo)
+    public async Task InserirVeiculo(Veiculo veiculo)
     {
-        throw new NotImplementedException();
+        veiculo.SetDateInc(DateTimeOffset.UtcNow);
+        veiculo.SetDateAlter(DateTimeOffset.UtcNow);
+        await _context.Veiculos.AddAsync(veiculo);
+        await _context.SaveChangesAsync();
     }
 
-    public Task RemoverVeiculo(Veiculo veiculo)
+    public async Task AtualizarVeiculo(Veiculo veiculo)
     {
-        throw new NotImplementedException();
+        veiculo.SetDateAlter(DateTimeOffset.UtcNow);
+        _context.Veiculos.Update(veiculo);
+        await _context.SaveChangesAsync();
+    }
+
+    public async Task RemoverVeiculo(Veiculo veiculo)
+    {
+        _context.Veiculos.Remove(veiculo);
+        await _context.SaveChangesAsync();
     }
 }

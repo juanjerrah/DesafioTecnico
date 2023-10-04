@@ -1,4 +1,4 @@
-﻿using Locadora.Api.Domain.Repositories;
+﻿using Locadora.Api.Domain.Interfaces;
 using Locadora.Api.Infra.Data.Contexts;
 using Locadora.Api.Infra.Data.Repositories;
 using Microsoft.EntityFrameworkCore;
@@ -15,7 +15,7 @@ public abstract class DependencyInjection
         
         //DI_LifeCycling
         services.AddScoped<IVeiculoRepository, VeiculoRepository>();
-        services.AddScoped<IEventoRepository, EventoRepository>();
+        services.AddScoped<IMovimentacoesVeiculoRepository, MovimentacoesVeiculoRepository>();
 
         return services;
     }

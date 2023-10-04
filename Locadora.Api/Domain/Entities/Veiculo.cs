@@ -5,21 +5,19 @@ namespace Locadora.Api.Domain.Entities;
 public class Veiculo : Entity<Veiculo>
 {
     public string Placa { get; private set; }
-    public TiposVeiculos TipoVeiculo { get; private set; }
-    public StatusVeiculo StatusVeiculo { get; private set; }
+    public ETiposVeiculos TipoVeiculo { get; private set; }
+    public EStatusVeiculo StatusVeiculo { get; private set; }
+    public MovimentacoesVeiculo MovimentacoesVeiculo { get; private set; }
 
     public Veiculo(){}
     
-    public Veiculo(string placa, TiposVeiculos tipoVeiculo, StatusVeiculo statusVeiculo)
+    public Veiculo(Guid id, string placa, ETiposVeiculos tipoVeiculo, EStatusVeiculo statusVeiculo)
     {
+        Id = id;
         Placa = placa;
         TipoVeiculo = tipoVeiculo;
         StatusVeiculo = statusVeiculo;
     }
-
-    public Veiculo(Guid id, string placa, TiposVeiculos tipoVeiculo, StatusVeiculo statusVeiculo)
-    : this(placa, tipoVeiculo, statusVeiculo) 
-        => Id = id;
 
     public override bool IsValid()
     {
