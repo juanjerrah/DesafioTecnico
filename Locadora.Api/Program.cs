@@ -1,4 +1,6 @@
+using System.Reflection;
 using Locadora.Api.Infra.IoC;
+using Microsoft.OpenApi.Models;
 
 var builder = WebApplication.CreateBuilder(args);
 

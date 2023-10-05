@@ -7,7 +7,7 @@ public class Veiculo : Entity<Veiculo>
     public string Placa { get; private set; }
     public ETiposVeiculos TipoVeiculo { get; private set; }
     public EStatusVeiculo StatusVeiculo { get; private set; }
-    public MovimentacoesVeiculo MovimentacoesVeiculo { get; private set; }
+    public IEnumerable<MovimentacoesVeiculo> MovimentacaoVeiculo { get; private set; }
 
     public Veiculo(){}
     

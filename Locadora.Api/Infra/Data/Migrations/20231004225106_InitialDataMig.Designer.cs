@@ -12,8 +12,8 @@ using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 namespace Locadora.Api.Infra.Data.Migrations
 {
     [DbContext(typeof(LocadoraContext))]
-    [Migration("20231003231518_inicial")]
-    partial class inicial
+    [Migration("20231004225106_InitialDataMig")]
+    partial class InitialDataMig
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
@@ -28,13 +28,8 @@ namespace Locadora.Api.Infra.Data.Migrations
                 {
                     b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("uuid");
-
-                    b.Property<int>("CascadeMode")
-                        .HasColumnType("integer");
-
-                    b.Property<int>("ClassLevelCascadeMode")
-                        .HasColumnType("integer");
+                        .HasColumnType("uuid")
+                        .HasColumnName("Mov_MovimentacoesVeiculoId");
 
                     b.Property<DateTimeOffset>("DateAlter")
                         .HasColumnType("timestamp with time zone");
@@ -44,30 +39,30 @@ namespace Locadora.Api.Infra.Data.Migrations
 
                     b.Property<string>("Descricao")
                         .IsRequired()
-                        .HasColumnType("text");
+                        .HasColumnType("text")
+                        .HasColumnName("Mov_Descricao");
 
-                    b.Property<int>("RuleLevelCascadeMode")
+                    b.Property<int>("MovimentacaoVeiculo")
                         .HasColumnType("integer");
 
                     b.Property<Guid>("VeiculoId")
-                        .HasColumnType("uuid");
+                        .HasColumnType("uuid")
+                        .HasColumnName("Vei_VeiculoId");
 
-                    b.HasKey("Id");
+                    b.HasKey("Id")
+                        .HasName("PK_Mov_MovimentacoesVeiculoId");
 
-                    b.ToTable("MovimentacoesVeiculos");
+                    b.HasIndex("VeiculoId");
+
+                    b.ToTable("Mov_MovimentacoesVeiculo", "Locadora");
                 });
 
             modelBuilder.Entity("Locadora.Api.Domain.Entities.Veiculo", b =>
                 {
                     b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("uuid");
-
-                    b.Property<int>("CascadeMode")
-                        .HasColumnType("integer");
-
-                    b.Property<int>("ClassLevelCascadeMode")
-                        .HasColumnType("integer");
+                        .HasColumnType("uuid")
+                        .HasColumnName("Vei_VeiculoId");
 
                     b.Property<DateTimeOffset>("DateAlter")
                         .HasColumnType("timestamp with time zone");
@@ -75,46 +70,39 @@ namespace Locadora.Api.Infra.Data.Migrations
                     b.Property<DateTimeOffset>("DateInc")
                         .HasColumnType("timestamp with time zone");
 
-                    b.Property<Guid>("MovimentacaoVeiculoId")
-                        .HasColumnType("uuid");
-
-                    b.Property<Guid>("MovimentacoesVeiculoId")
-                        .HasColumnType("uuid");
-
                     b.Property<string>("Placa")
                         .IsRequired()
-                        .HasColumnType("text");
-
-                    b.Property<int>("RuleLevelCascadeMode")
-                        .HasColumnType("integer");
+                        .HasColumnType("text")
+                        .HasColumnName("Vei_Placa");
 
                     b.Property<int>("StatusVeiculo")
-                        .HasColumnType("integer");
+                        .HasColumnType("integer")
+                        .HasColumnName("Vei_Status");
 
                     b.Property<int>("TipoVeiculo")
-                        .HasColumnType("integer");
+                        .HasColumnType("integer")
+                        .HasColumnName("Vei_Tipo");
 
-                    b.HasKey("Id");
+                    b.HasKey("Id")
+                        .HasName("PK_Vei_Veiculo");
 
-                    b.HasIndex("MovimentacoesVeiculoId");
-
-                    b.ToTable("Veiculos");
-                });
-
-            modelBuilder.Entity("Locadora.Api.Domain.Entities.Veiculo", b =>
-                {
-                    b.HasOne("Locadora.Api.Domain.Entities.MovimentacoesVeiculo", "MovimentacoesVeiculo")
-                        .WithMany("Veiculos")
-                        .HasForeignKey("MovimentacoesVeiculoId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.Navigation("MovimentacoesVeiculo");
+                    b.ToTable("Vei_Veiculo", "Locadora");
                 });
 
             modelBuilder.Entity("Locadora.Api.Domain.Entities.MovimentacoesVeiculo", b =>
                 {
-                    b.Navigation("Veiculos");
+                    b.HasOne("Locadora.Api.Domain.Entities.Veiculo", "Veiculo")
+                        .WithMany("MovimentacaoVeiculo")
+                        .HasForeignKey("VeiculoId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Veiculo");
+                });
+
+            modelBuilder.Entity("Locadora.Api.Domain.Entities.Veiculo", b =>
+                {
+                    b.Navigation("MovimentacaoVeiculo");
                 });
 #pragma warning restore 612, 618
         }

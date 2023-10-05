@@ -24,5 +24,14 @@ public class MovimentacoesVeiculoMappingConfiguration : IEntityTypeConfiguration
         builder.Property(x => x.VeiculoId)
             .HasColumnName("Vei_VeiculoId");
 
+        builder.HasOne(m => m.Veiculo)
+            .WithMany(v => v.MovimentacaoVeiculo)
+            .HasForeignKey(m => m.VeiculoId);
+        
+        builder.Ignore(x => x.ValidationResult);
+        builder.Ignore(x => x.CascadeMode);
+        builder.Ignore(x => x.ClassLevelCascadeMode);
+        builder.Ignore(x => x.RuleLevelCascadeMode);
+
     }
 }

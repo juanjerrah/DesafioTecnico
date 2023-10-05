@@ -1,4 +1,7 @@
-﻿using Locadora.Api.Domain.Interfaces;
+﻿using Locadora.Api.Application.Interfaces;
+using Locadora.Api.Application.Services;
+using Locadora.Api.Domain.Bus;
+using Locadora.Api.Domain.Interfaces;
 using Locadora.Api.Infra.Data.Contexts;
 using Locadora.Api.Infra.Data.Repositories;
 using Microsoft.EntityFrameworkCore;
@@ -14,8 +17,14 @@ public abstract class DependencyInjection
             opt.UseNpgsql(configuration.GetConnectionString("DefaultConnection")));
         
         //DI_LifeCycling
+        services.AddScoped<IMessageBus, MessageBus>();
         services.AddScoped<IVeiculoRepository, VeiculoRepository>();
+        services.AddScoped<IVeiculoAppService, VeiculoAppService>();
         services.AddScoped<IMovimentacoesVeiculoRepository, MovimentacoesVeiculoRepository>();
+        services.AddScoped<IMovimentacoesAppService, MovimentacaoAppService>();
+        
+        //AutoMapper injection
+        services.AddAutoMapper(AppDomain.CurrentDomain.GetAssemblies());
 
         return services;
     }

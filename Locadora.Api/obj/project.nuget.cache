@@ -1,10 +1,11 @@
 {
   "version": 2,
-  "dgSpecHash": "pj6RndnOgK1P0Jp64eMJVHlPV7N/YGwNQ+KKXfrL2IudZ91pXppSZWtNX29gzMxrEOnnLVG4I7KJ6C9nhNtEmw==",
+  "dgSpecHash": "8xTRdHiNufYPxrBiCmxoRL0hrVsi0wNzWyvQQUC5MAeOdSe95/Tk4gJvOJoaiGmNJw4N3/LjtghAlpRZ8aTB5Q==",
   "success": true,
   "projectFilePath": "C:\\Projetos\\csharp\\DesafioTecnico\\Locadora.Api\\Locadora.Api.csproj",
   "expectedPackageFiles": [
     "C:\\Users\\zecau\\.nuget\\packages\\automapper\\12.0.1\\automapper.12.0.1.nupkg.sha512",
+    "C:\\Users\\zecau\\.nuget\\packages\\automapper.extensions.microsoft.dependencyinjection\\12.0.1\\automapper.extensions.microsoft.dependencyinjection.12.0.1.nupkg.sha512",
     "C:\\Users\\zecau\\.nuget\\packages\\fluentvalidation\\11.7.1\\fluentvalidation.11.7.1.nupkg.sha512",
     "C:\\Users\\zecau\\.nuget\\packages\\humanizer.core\\2.8.26\\humanizer.core.2.8.26.nupkg.sha512",
     "C:\\Users\\zecau\\.nuget\\packages\\microsoft.csharp\\4.7.0\\microsoft.csharp.4.7.0.nupkg.sha512",

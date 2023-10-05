@@ -10,14 +10,16 @@ namespace Locadora.Api.Application.Services;
 public partial class VeiculoAppService : IVeiculoAppService
 {
     private readonly IVeiculoRepository _repository;
+    private readonly IMovimentacoesVeiculoRepository _repository2;
     private readonly IMapper _mapper;
     private readonly IMessageBus _bus;
 
-    public VeiculoAppService(IVeiculoRepository repository, IMapper mapper, IMessageBus bus)
+    public VeiculoAppService(IVeiculoRepository repository, IMapper mapper, IMessageBus bus, IMovimentacoesVeiculoRepository repository2)
     {
         _repository = repository;
         _mapper = mapper;
         _bus = bus;
+        _repository2 = repository2;
     }
 
     public async Task<IEnumerable<VeiculoResponse>> ObterVeiculos()
@@ -40,12 +42,12 @@ public partial class VeiculoAppService : IVeiculoAppService
         return _mapper.Map<VeiculoResponse>(veiculo);
     }
 
-    public async Task InserirVeiculo(InserirVeiculoRequest veiculoRequest)
+    public async Task<VeiculoResponse> InserirVeiculo(InserirVeiculoRequest veiculoRequest)
     {
         if (string.IsNullOrWhiteSpace(veiculoRequest.Placa))
         {
             _bus.RaiseValidationError("Placa é um campo obrigatório", StatusCodes.Status400BadRequest);
-            return;
+            return new VeiculoResponse();
         }
 
         var placaValida = ValidarPlaca(veiculoRequest.Placa);
@@ -54,49 +56,53 @@ public partial class VeiculoAppService : IVeiculoAppService
         {
             _bus.RaiseValidationError($"A placa {veiculoRequest.Placa} é inválida. Formatos válidos: XXX0000 ou XXX0X00"
                 , StatusCodes.Status400BadRequest);
-            return;
+            return new VeiculoResponse();
         }
 
-        var veiculo = new Veiculo(Guid.NewGuid(), ConverterPlacaMercosul(veiculoRequest.Placa),
-            veiculoRequest.ETipoVeiculo, veiculoRequest.EStatusVeiculo);
+        var placaMercosul = ConverterPlacaMercosul(veiculoRequest.Placa);
+        var veiculo = new Veiculo(Guid.NewGuid(), placaMercosul,
+            veiculoRequest.TipoDoVeiculo, veiculoRequest.StatusDoVeiculo);
 
         await _repository.InserirVeiculo(veiculo);
-
+        
         var movimentoVeiculo = new MovimentacoesVeiculo(
-            $"Veiculo de placa {veiculoRequest.Placa} foi inserído {veiculo.DateInc.ToString("f")}",
+            $"Veiculo de placa {placaMercosul} foi inserído {veiculo.DateInc.ToString("f")}",
             EMovimentacaoVeiculo.EntradaVeiculoNaBase, veiculo.Id);
 
-        //InserirMovimentoVeiculo(movimentoVeiculo);
+        await _repository2.InserirMovimentacaoVeiculo(movimentoVeiculo);
+        
+        return _mapper.Map<VeiculoResponse>(veiculo);
 
     }
 
-    public async Task AtualizarVeiculo(AtualizarVeiculoRequest veiculoRequest)
+    public async Task<VeiculoResponse> AtualizarVeiculo(AtualizarVeiculoRequest veiculoRequest)
     {
         if (string.IsNullOrWhiteSpace(veiculoRequest.Placa))
         {
             _bus.RaiseValidationError("Placa é um campo obrigatório", StatusCodes.Status400BadRequest);
-            return;
+            return new VeiculoResponse();
         }
 
         if (veiculoRequest.StatusVeiculo == null)
         {
             _bus.RaiseValidationError("Status do veículo é um campo obrigatório", StatusCodes.Status400BadRequest);
-            return;
+            return new VeiculoResponse();
         }
-        
-        var veiculoBase = await _repository.ObterVeiculoPorPlaca(ConverterPlacaMercosul(veiculoRequest.Placa));
+
+        var placaMercosul = ConverterPlacaMercosul(veiculoRequest.Placa);
+        var veiculoBase = await _repository.ObterVeiculoPorPlaca(placaMercosul);
 
         if (veiculoBase == null)
         {
-            _bus.RaiseValidationError($"Veículo de placa {veiculoRequest.Placa} não encontrado na base", StatusCodes.Status400BadRequest);
-            return;
+            _bus.RaiseValidationError($"Veículo de placa {placaMercosul} não encontrado na base", StatusCodes.Status400BadRequest);
+            return new VeiculoResponse();
         }
 
         if (veiculoRequest.StatusVeiculo == veiculoBase.StatusVeiculo)
         {
-            _bus.RaiseValidationError($"O Veículo de placa {veiculoRequest.Placa} já se encontra na situação que deseja " +
-                          $"alterar: {nameof(veiculoRequest.StatusVeiculo)}", StatusCodes.Status400BadRequest);
-            return;
+            _bus.RaiseValidationError($"O Veículo de placa {placaMercosul} já se encontra na situação que deseja " +
+                          $"alterar: {veiculoRequest.StatusVeiculo.ToString()}", StatusCodes.Status400BadRequest);
+            return new VeiculoResponse();
         }
 
         var veiculo = new Veiculo(veiculoBase.Id, veiculoBase.Placa, veiculoBase.TipoVeiculo,
@@ -105,13 +111,18 @@ public partial class VeiculoAppService : IVeiculoAppService
         await _repository.AtualizarVeiculo(veiculo);
         
         var mensagem = veiculoRequest.StatusVeiculo is EStatusVeiculo.Disponivel 
-            ? $"Veiculo de placa {veiculoRequest.Placa} está disponível desde: {veiculo.DateInc.ToString("f")}" 
-            : $"Veiculo de placa {veiculoRequest.Placa} foi locado: {veiculo.DateInc.ToString("f")}";
+            ? $"Veiculo de placa {placaMercosul} está disponível desde: {veiculo.DateAlter.ToString("f")}" 
+            : $"Veiculo de placa {placaMercosul} foi locado: {veiculo.DateAlter.ToString("f")}";
+        var tipoMovimento = veiculoRequest.StatusVeiculo is EStatusVeiculo.Disponivel
+            ? EMovimentacaoVeiculo.VeiculoRetornado
+            : EMovimentacaoVeiculo.VeiculoAlugado;
 
-        var movimentoVeiculo = new MovimentacoesVeiculo(mensagem, EMovimentacaoVeiculo.EntradaVeiculoNaBase,
+        var movimentoVeiculo = new MovimentacoesVeiculo(mensagem, tipoMovimento,
             veiculoBase.Id);
 
-        //InserirMovimentoVeiculo(movimentoVeiculo);
+        await _repository2.InserirMovimentacaoVeiculo(movimentoVeiculo);
+
+        return _mapper.Map<VeiculoResponse>(veiculo);
     }
 
     public async Task ExcluirVeiculo(string placa)

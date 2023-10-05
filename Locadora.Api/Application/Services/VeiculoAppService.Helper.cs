@@ -12,7 +12,7 @@ public partial class VeiculoAppService
     /// <returns>True ou False conforme a validade da placa</returns>
     public static bool ValidarPlaca(string placa)
     {
-        var regexPattern = "^[a-jA-J]{3}[0-9]{4}$|^[a-jA-J]{3}[0-9][a-jA-J][0-9]{2}$";
+        var regexPattern = @"^[A-z]{3}\d[A-j0-9]\d{2}$";
 
         return Regex.IsMatch(placa, regexPattern);
     }

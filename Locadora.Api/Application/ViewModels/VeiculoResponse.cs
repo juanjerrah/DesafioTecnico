@@ -6,7 +6,6 @@ public class VeiculoResponse
 {
     public Guid Id { get; set; }
     public string Placa { get; set; }
-    public ETiposVeiculos ETipoVeiculo { get; set; }
-    public EStatusVeiculo EStatusVeiculo { get; set; }
-    public Guid MovimentacaoVeiculoId { get; set; }
+    public string ETipoVeiculo { get; set; }
+    public string EStatusVeiculo { get; set; }
 }

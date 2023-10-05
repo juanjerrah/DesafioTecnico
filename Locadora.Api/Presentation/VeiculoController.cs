@@ -1,4 +1,5 @@
 ﻿using Locadora.Api.Application.Interfaces;
+using Locadora.Api.Application.ViewModels;
 using Locadora.Api.Domain.Interfaces;
 using Microsoft.AspNetCore.Mvc;
 
@@ -24,6 +25,20 @@ public class VeiculoController : CoreController
         var veiculos = await _appService.ObterVeiculos();
 
         return Response(veiculos);
+    }
+
+    [HttpPost]
+    public async Task<IActionResult> InserirVeiculo(InserirVeiculoRequest veiculoRequest)
+    {
+        var veiculo = await _appService.InserirVeiculo(veiculoRequest);
+        return Response(veiculo);
+    }
+
+    [HttpPatch]
+    public async Task<IActionResult> AtualizarVeiculo(AtualizarVeiculoRequest veiculoRequest)
+    {
+        var veiculo = await _appService.AtualizarVeiculo(veiculoRequest);
+        return Response(veiculo);
     }
 
 }

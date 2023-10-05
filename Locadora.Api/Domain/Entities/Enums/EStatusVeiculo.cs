@@ -2,6 +2,6 @@
 
 public enum EStatusVeiculo
 {
-    Disponivel,
-    Locado
+    Disponivel = 1,
+    Locado = 2
 }

@@ -2,9 +2,9 @@
 
 public enum ETiposVeiculos
 {
-    Hatch,
-    Sedan,
-    Suv,
-    Coupe,
-    Pickup
+    Hatch = 1,
+    Sedan = 2,
+    Suv = 3,
+    Coupe = 4,
+    Pickup = 5
 }

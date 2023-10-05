@@ -17,7 +17,7 @@ public class VeiculoRepository : IVeiculoRepository
     public async Task<IEnumerable<Veiculo>> ObterVeiculos()
     {
         var veiculos =  await _context.Veiculos
-            .Include(x => x.MovimentacoesVeiculo)
+            .Include(x => x.MovimentacaoVeiculo)
             .ToListAsync();
         
         return veiculos;
@@ -26,7 +26,7 @@ public class VeiculoRepository : IVeiculoRepository
     public async Task<Veiculo?> ObterVeiculoPorPlaca(string placa)
     {
         var veiculo = await _context.Veiculos
-            .Include(x => x.MovimentacoesVeiculo)
+            .Include(x => x.MovimentacaoVeiculo).AsNoTracking()
             .FirstOrDefaultAsync(x => x.Placa.ToLower().Equals(placa.ToLower()));
 
         return veiculo;

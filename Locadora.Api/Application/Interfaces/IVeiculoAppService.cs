@@ -16,7 +16,7 @@ public interface IVeiculoAppService
     /// <param name="placa">Placa do veículo que deseja consultar</param>
     /// <returns>Veículo com a placa correspondente</returns>
     Task<VeiculoResponse> ObterVeiculoPorPlaca(string placa);
-    Task InserirVeiculo(InserirVeiculoRequest veiculoRequest);
-    Task AtualizarVeiculo(AtualizarVeiculoRequest veiculoRequest);
+    Task<VeiculoResponse> InserirVeiculo(InserirVeiculoRequest veiculoRequest);
+    Task<VeiculoResponse> AtualizarVeiculo(AtualizarVeiculoRequest veiculoRequest);
     Task ExcluirVeiculo(string placa);
 }
