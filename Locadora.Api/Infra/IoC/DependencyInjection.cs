@@ -1,4 +1,5 @@
-﻿using Locadora.Api.Application.Interfaces;
+﻿using Locadora.Api.Application.AutoMapper;
+using Locadora.Api.Application.Interfaces;
 using Locadora.Api.Application.Services;
 using Locadora.Api.Domain.Bus;
 using Locadora.Api.Domain.Interfaces;
@@ -24,6 +25,8 @@ public abstract class DependencyInjection
         services.AddScoped<IMovimentacoesAppService, MovimentacaoAppService>();
         
         //AutoMapper injection
+        var mapper = AutoMapperConfiguration.RegisterMappings().CreateMapper();
+        services.AddSingleton(mapper);
         services.AddAutoMapper(AppDomain.CurrentDomain.GetAssemblies());
 
         return services;

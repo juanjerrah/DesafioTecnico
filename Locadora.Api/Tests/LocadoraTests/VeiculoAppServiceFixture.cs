@@ -1,4 +1,5 @@
-﻿using Locadora.Api.Application.Interfaces;
+﻿using Locadora.Api.Application.AutoMapper;
+using Locadora.Api.Application.Interfaces;
 using Locadora.Api.Application.Services;
 using Locadora.Api.Domain.Entities;
 using Locadora.Api.Domain.Interfaces;
@@ -19,6 +20,8 @@ public class VeiculoAppServiceFixture
     {
         Mocker = new AutoMocker();
 
+        Mocker.Use(AutoMapperConfiguration.RegisterMappings().CreateMapper());
+        
         VeiculoAppService = Mocker.CreateInstance<VeiculoAppService>();
 
         return VeiculoAppService;
@@ -29,5 +32,13 @@ public class VeiculoAppServiceFixture
         Mocker.GetMock<IVeiculoRepository>()
             .Setup(x => x.ObterVeiculos())
             .ReturnsAsync(veiculos);
+    }
+    
+    public void SetupObterVeiculoPorPlaca(IEnumerable<Veiculo> veiculos)
+    {
+        Mocker.GetMock<IVeiculoRepository>()
+            .Setup(x => x.ObterVeiculoPorPlaca(It.IsAny<string>()))
+            .ReturnsAsync((string placa) =>
+                veiculos.FirstOrDefault(x => x.Placa.ToLower().Equals(placa.ToLower())));
     }
 }

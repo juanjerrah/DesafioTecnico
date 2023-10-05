@@ -168,3 +168,4 @@ C:\Users\juan.oliveira\RiderProjects\DesafioTecnico\Locadora.Api\bin\Debug\net6.
 C:\Users\juan.oliveira\RiderProjects\DesafioTecnico\Locadora.Api\bin\Debug\net6.0\zh-Hant\Microsoft.TestPlatform.CommunicationUtilities.resources.dll
 C:\Users\juan.oliveira\RiderProjects\DesafioTecnico\Locadora.Api\bin\Debug\net6.0\zh-Hant\Microsoft.TestPlatform.CrossPlatEngine.resources.dll
 C:\Users\juan.oliveira\RiderProjects\DesafioTecnico\Locadora.Api\bin\Debug\net6.0\zh-Hant\Microsoft.VisualStudio.TestPlatform.Common.resources.dll
+C:\Users\juan.oliveira\RiderProjects\DesafioTecnico\Locadora.Api\bin\Debug\net6.0\Microsoft.Extensions.Configuration.dll

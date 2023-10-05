@@ -26,7 +26,9 @@ public partial class VeiculoAppService : IVeiculoAppService
     {
         var veiculos = await _repository.ObterVeiculos();
 
-        return _mapper.Map<IEnumerable<VeiculoResponse>>(veiculos);
+        var x = _mapper.Map<IEnumerable<VeiculoResponse>>(veiculos);
+        
+        return x;
     }
 
     public async Task<VeiculoResponse> ObterVeiculoPorPlaca(string placa)
