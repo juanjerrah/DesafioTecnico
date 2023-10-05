@@ -117,8 +117,7 @@ public partial class VeiculoAppService : IVeiculoAppService
             ? EMovimentacaoVeiculo.VeiculoRetornado
             : EMovimentacaoVeiculo.VeiculoAlugado;
 
-        var movimentoVeiculo = new MovimentacoesVeiculo(mensagem, tipoMovimento,
-            veiculoBase.Id);
+        var movimentoVeiculo = new MovimentacoesVeiculo(mensagem, tipoMovimento, veiculoBase.Id);
 
         await _repository2.InserirMovimentacaoVeiculo(movimentoVeiculo);
 
