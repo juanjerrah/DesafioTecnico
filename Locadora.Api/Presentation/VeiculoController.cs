@@ -20,9 +20,9 @@ public class VeiculoController : CoreController
     /// </summary>
     /// <returns></returns>
     [HttpGet]
-    public async Task<IActionResult> ObterVeiculos()
+    public async Task<IActionResult> ObterVeiculos([FromQuery] VeiculoFiltroRequest filtro)
     {
-        var veiculos = await _appService.ObterVeiculos();
+        var veiculos = await _appService.ObterVeiculos(filtro);
 
         return Response(veiculos);
     }
@@ -39,6 +39,13 @@ public class VeiculoController : CoreController
     {
         var veiculo = await _appService.AtualizarVeiculo(veiculoRequest);
         return Response(veiculo);
+    }
+    
+    [HttpDelete]
+    public async Task<IActionResult> RemoverVeiculo(string placa)
+    {
+        var resultado = await _appService.ExcluirVeiculo(placa);
+        return Response(resultado);
     }
 
 }

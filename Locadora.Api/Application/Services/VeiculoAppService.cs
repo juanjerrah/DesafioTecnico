@@ -1,9 +1,12 @@
-﻿using AutoMapper;
+﻿using System.ComponentModel.DataAnnotations;
+using System.Text;
+using AutoMapper;
 using Locadora.Api.Application.Interfaces;
 using Locadora.Api.Application.ViewModels;
 using Locadora.Api.Domain.Entities;
 using Locadora.Api.Domain.Entities.Enums;
 using Locadora.Api.Domain.Interfaces;
+using Locadora.Api.Domain.Util;
 
 namespace Locadora.Api.Application.Services;
 
@@ -22,9 +25,21 @@ public partial class VeiculoAppService : IVeiculoAppService
         _repository2 = repository2;
     }
 
-    public async Task<IEnumerable<VeiculoResponse>> ObterVeiculos()
+    public async Task<IEnumerable<VeiculoResponse>> ObterVeiculos(VeiculoFiltroRequest filtro)
     {
-        var veiculos = await _repository.ObterVeiculos();
+        var predicate = ExpressionExtension.Start<Veiculo>();
+        
+        if (filtro.VeiculoId != null) 
+            predicate = predicate.And(x => x.Id.Equals(filtro.VeiculoId));
+        if (!string.IsNullOrWhiteSpace(filtro.Placa))
+            predicate = predicate.And(x => x.Placa.ToLower().Equals(filtro.Placa.ToLower()));
+        if (filtro.StatusVeiculo != null)
+            predicate = predicate.And(x => x.StatusVeiculo.Equals(filtro.StatusVeiculo));
+        if (filtro.TipoVeiculo != null)
+            predicate = predicate.And(x => x.TipoVeiculo.Equals(filtro.TipoVeiculo));
+
+
+        var veiculos = await _repository.ObterVeiculos(predicate);
 
         var x = _mapper.Map<IEnumerable<VeiculoResponse>>(veiculos);
         
@@ -46,6 +61,11 @@ public partial class VeiculoAppService : IVeiculoAppService
 
     public async Task<VeiculoResponse> InserirVeiculo(InserirVeiculoRequest veiculoRequest)
     {
+        if (veiculoRequest.StatusDoVeiculo is null || veiculoRequest.TipoDoVeiculo is null)
+        {
+            _bus.RaiseValidationError("Tipo e status do veículo são obrigatórios", StatusCodes.Status400BadRequest);
+            return new VeiculoResponse();
+        }
         if (string.IsNullOrWhiteSpace(veiculoRequest.Placa))
         {
             _bus.RaiseValidationError("Placa é um campo obrigatório", StatusCodes.Status400BadRequest);
@@ -63,7 +83,7 @@ public partial class VeiculoAppService : IVeiculoAppService
 
         var placaMercosul = ConverterPlacaMercosul(veiculoRequest.Placa);
         var veiculo = new Veiculo(Guid.NewGuid(), placaMercosul,
-            veiculoRequest.TipoDoVeiculo, veiculoRequest.StatusDoVeiculo);
+            veiculoRequest.TipoDoVeiculo!.Value, veiculoRequest.StatusDoVeiculo!.Value);
 
         await _repository.InserirVeiculo(veiculo);
         
@@ -126,22 +146,27 @@ public partial class VeiculoAppService : IVeiculoAppService
         return _mapper.Map<VeiculoResponse>(veiculo);
     }
 
-    public async Task ExcluirVeiculo(string placa)
+    public async Task<bool> ExcluirVeiculo(string placa)
     {
         if (string.IsNullOrWhiteSpace(placa))
         {
             _bus.RaiseValidationError("Placa é um campo obrigatório", StatusCodes.Status400BadRequest);
-            return;
+            return false;
         }
 
-        var veiculo = await _repository.ObterVeiculoPorPlaca(ConverterPlacaMercosul(placa));
+        var placaMercosul = ConverterPlacaMercosul(placa);
+
+        var veiculo = await _repository.ObterVeiculoPorPlaca(placaMercosul);
         
         if (veiculo == null)
         {
             _bus.RaiseValidationError($"Veículo de placa {placa} não encontrado na base", StatusCodes.Status400BadRequest);
-            return;
+            return false;
         }
-
+        
         await _repository.RemoverVeiculo(veiculo);
+
+
+        return true;
     }
 }

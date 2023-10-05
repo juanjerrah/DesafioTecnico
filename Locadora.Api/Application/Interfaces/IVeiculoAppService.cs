@@ -8,7 +8,7 @@ public interface IVeiculoAppService
     ///     Obtém todos os veículos da base
     /// </summary>
     /// <returns>Os veículos da base</returns>
-    Task<IEnumerable<VeiculoResponse>> ObterVeiculos();
+    Task<IEnumerable<VeiculoResponse>> ObterVeiculos(VeiculoFiltroRequest filtroRequest);
     
     /// <summary>
     ///     Obtém veículo pela placa informada
@@ -18,5 +18,5 @@ public interface IVeiculoAppService
     Task<VeiculoResponse> ObterVeiculoPorPlaca(string placa);
     Task<VeiculoResponse> InserirVeiculo(InserirVeiculoRequest veiculoRequest);
     Task<VeiculoResponse> AtualizarVeiculo(AtualizarVeiculoRequest veiculoRequest);
-    Task ExcluirVeiculo(string placa);
+    Task<bool> ExcluirVeiculo(string placa);
 }

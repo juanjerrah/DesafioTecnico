@@ -1,4 +1,5 @@
-﻿using Locadora.Api.Domain.Entities;
+﻿using System.Linq.Expressions;
+using Locadora.Api.Domain.Entities;
 using Locadora.Api.Domain.Interfaces;
 using Locadora.Api.Infra.Data.Contexts;
 using Microsoft.EntityFrameworkCore;
@@ -14,9 +15,10 @@ public class VeiculoRepository : IVeiculoRepository
         _context = context;
     }
 
-    public async Task<IEnumerable<Veiculo>> ObterVeiculos()
+    public async Task<IEnumerable<Veiculo>> ObterVeiculos(Expression<Func<Veiculo, bool>> predicate)
     {
         var veiculos =  await _context.Veiculos
+            .Where(predicate)
             .Include(x => x.MovimentacaoVeiculo)
             .ToListAsync();
         
@@ -26,7 +28,8 @@ public class VeiculoRepository : IVeiculoRepository
     public async Task<Veiculo?> ObterVeiculoPorPlaca(string placa)
     {
         var veiculo = await _context.Veiculos
-            .Include(x => x.MovimentacaoVeiculo).AsNoTracking()
+            .Include(x => x.MovimentacaoVeiculo)
+            .AsNoTracking()
             .FirstOrDefaultAsync(x => x.Placa.ToLower().Equals(placa.ToLower()));
 
         return veiculo;

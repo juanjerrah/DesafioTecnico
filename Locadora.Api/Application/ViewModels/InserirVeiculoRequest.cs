@@ -1,4 +1,5 @@
-﻿using Locadora.Api.Domain.Entities.Enums;
+﻿using System.ComponentModel.DataAnnotations;
+using Locadora.Api.Domain.Entities.Enums;
 
 namespace Locadora.Api.Application.ViewModels;
 
@@ -13,11 +14,11 @@ public class InserirVeiculoRequest
     /// Coupe = 4
     /// Pickup = 5
     /// </summary>
-    public ETiposVeiculos TipoDoVeiculo { get; set; }
+    public ETiposVeiculos? TipoDoVeiculo { get; set; }
 
     /// <summary>
     /// Disponivel = 1,
     /// Locado = 2
     /// </summary>
-    public EStatusVeiculo StatusDoVeiculo { get; set; }
+    public EStatusVeiculo? StatusDoVeiculo { get; set; }
 }

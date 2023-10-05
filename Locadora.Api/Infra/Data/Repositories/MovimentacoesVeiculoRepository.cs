@@ -1,6 +1,7 @@
 ﻿using Locadora.Api.Domain.Entities;
 using Locadora.Api.Domain.Interfaces;
 using Locadora.Api.Infra.Data.Contexts;
+using Microsoft.EntityFrameworkCore;
 
 namespace Locadora.Api.Infra.Data.Repositories;
 
@@ -21,8 +22,11 @@ public class MovimentacoesVeiculoRepository : IMovimentacoesVeiculoRepository
         await _context.SaveChangesAsync();
     }
 
-    public Task<IEnumerable<MovimentacoesVeiculo>> ObterEventosVeiculo(Guid veiculoId)
+    public async Task<IEnumerable<MovimentacoesVeiculo>> ObterEventosVeiculo(Guid veiculoId)
     {
-        throw new NotImplementedException();
+        var query = await _context.MovimentacoesVeiculos
+            .Include(x => x.Veiculo)
+            .Where(x => x.VeiculoId.Equals(veiculoId)).ToListAsync();
+        return query;
     }
 }

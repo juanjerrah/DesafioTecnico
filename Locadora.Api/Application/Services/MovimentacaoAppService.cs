@@ -19,10 +19,16 @@ public class MovimentacaoAppService : IMovimentacoesAppService
         _repository = repository;
     }
 
-    public async Task InserirMovimentacao(InserirMovimentacaoRequest movimentacaoRequest)
+    public async Task<IEnumerable<MovimentacaoResponse>> ObterMovimentacoesDoVeiculo(Guid veiculoId)
     {
-        var movimento = new MovimentacoesVeiculo(Guid.NewGuid(), movimentacaoRequest.Descricao, 
-            movimentacaoRequest.MovimentacaoVeiculo, movimentacaoRequest.VeiculoId);
-        await _repository.InserirMovimentacaoVeiculo(movimento);
+        if (veiculoId == Guid.Empty)
+        {
+            _bus.RaiseValidationError("O veículo é necessário", StatusCodes.Status400BadRequest);
+            return Enumerable.Empty<MovimentacaoResponse>();
+        }
+        var movimentos = await _repository.ObterEventosVeiculo(veiculoId);
+        var orderedMovements = movimentos.OrderByDescending(x => x.DateInc);
+
+        return _mapper.Map<IEnumerable<MovimentacaoResponse>>(orderedMovements);
     }
 }

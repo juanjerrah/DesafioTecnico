@@ -30,7 +30,7 @@ public partial class VeiculoAppService
     {
         if (!ValidarPlaca(placa))
         {
-            _bus.RaiseValidationError($"Placa {placa} inválida.", StatusCodes.Status400BadRequest);
+            _bus.RaiseValidationError($"Placa {placa.ToUpper()} inválida.", StatusCodes.Status400BadRequest);
             return String.Empty;
         }
         

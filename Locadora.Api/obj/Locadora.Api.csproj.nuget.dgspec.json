@@ -1,25 +1,31 @@
 {
   "format": 1,
   "restore": {
-    "C:\\Users\\juan.oliveira\\RiderProjects\\DesafioTecnico\\Locadora.Api\\Locadora.Api.csproj": {}
+    "C:\\Projetos\\csharp\\DesafioTecnico\\Locadora.Api\\Locadora.Api.csproj": {}
   },
   "projects": {
-    "C:\\Users\\juan.oliveira\\RiderProjects\\DesafioTecnico\\Locadora.Api\\Locadora.Api.csproj": {
+    "C:\\Projetos\\csharp\\DesafioTecnico\\Locadora.Api\\Locadora.Api.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "C:\\Users\\juan.oliveira\\RiderProjects\\DesafioTecnico\\Locadora.Api\\Locadora.Api.csproj",
+        "projectUniqueName": "C:\\Projetos\\csharp\\DesafioTecnico\\Locadora.Api\\Locadora.Api.csproj",
         "projectName": "Locadora.Api",
-        "projectPath": "C:\\Users\\juan.oliveira\\RiderProjects\\DesafioTecnico\\Locadora.Api\\Locadora.Api.csproj",
-        "packagesPath": "C:\\Users\\juan.oliveira\\.nuget\\packages\\",
-        "outputPath": "C:\\Users\\juan.oliveira\\RiderProjects\\DesafioTecnico\\Locadora.Api\\obj\\",
+        "projectPath": "C:\\Projetos\\csharp\\DesafioTecnico\\Locadora.Api\\Locadora.Api.csproj",
+        "packagesPath": "C:\\Users\\zecau\\.nuget\\packages\\",
+        "outputPath": "C:\\Projetos\\csharp\\DesafioTecnico\\Locadora.Api\\obj\\",
         "projectStyle": "PackageReference",
+        "fallbackFolders": [
+          "C:\\Program Files (x86)\\Microsoft Visual Studio\\Shared\\NuGetPackages"
+        ],
         "configFilePaths": [
-          "C:\\Users\\juan.oliveira\\AppData\\Roaming\\NuGet\\NuGet.Config"
+          "C:\\Users\\zecau\\AppData\\Roaming\\NuGet\\NuGet.Config",
+          "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.FallbackLocation.config",
+          "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.Offline.config"
         ],
         "originalTargetFrameworks": [
           "net6.0"
         ],
         "sources": {
+          "C:\\Program Files (x86)\\Microsoft SDKs\\NuGetPackages\\": {},
           "https://api.nuget.org/v3/index.json": {}
         },
         "frameworks": {
@@ -104,7 +110,7 @@
               "privateAssets": "all"
             }
           },
-          "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\6.0.405\\RuntimeIdentifierGraph.json"
+          "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\7.0.400\\RuntimeIdentifierGraph.json"
         }
       }
     }
