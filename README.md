@@ -21,7 +21,7 @@ Este projeto tem o objetivo de cumprir o desafio técnico para a vaga de desenvo
 
 ## Documentação da API
 
-#### Retorna todos os itens
+## Obtém veículos
 
 ```http
   [GET] api/Locadora/Veiculo
@@ -49,6 +49,7 @@ Este projeto tem o objetivo de cumprir o desafio técnico para a vaga de desenvo
   ]
 }
 ```
+## Inserir veículo
 
 ```http
   [POST] api/Locadora/Veiculo
@@ -76,7 +77,7 @@ Este projeto tem o objetivo de cumprir o desafio técnico para a vaga de desenvo
   }
 }
 ```
-
+## Atualizar veículo
 ```http
   [PATCH] api/Locadora/Veiculo
 ```
@@ -102,50 +103,47 @@ Este projeto tem o objetivo de cumprir o desafio técnico para a vaga de desenvo
   }
 }
 ```
-
+## Excluir veículo
 ```http
   [DELETE] api/Locadora/Veiculo
 ```
 
 ### Body de alteracao de veículo
-```json
-{
-  "placa": "string",
-  "statusDoVeiculo": 1
-}
-```
-#### Retorna o novo registro que foi criado
+
+| Parâmetro   | Tipo       | Descrição                           |
+| :---------- | :--------- | :---------------------------------- |
+| `Placa` | `string` | **Obrigatório**. Placa do veículo que deseja excluir |
+
+#### Retorna o status da ação de exclusão
 ### Exemplo Retorno
 ```json
 {
   "status": 200,
   "dataCount": 0,
-  "data": {
-    "id": "3fa85f64-5717-4562-b3fc-2c963f66afa6",
-    "placa": "string",
-    "eTipoVeiculo": "string",
-    "eStatusVeiculo": "string"
-  }
+  "data": true
 }
 ```
 
+## Obtém movimentações de um veículo
 
-## Uso/Exemplos
+```http
+  [GET] api/Locadora/Movimentacao/MovimentacoesVeiculo
+```
 
-```javascript
-import Component from 'my-project'
+| Parâmetro   | Tipo       | Descrição                           |
+| :---------- | :--------- | :---------------------------------- |
+| `VeiculoId` | `Guid` | **Obrigatório**. Id do veículo que deseja filtrar |
 
-function App() {
-  return <Component />
+#### Retorna todos os registros do veículo referente a placa
+```json
+{
+  "status": 200,
+  "dataCount": 0,
+  "data": [
+    {
+      "descricao": "string",
+      "movimentacaoVeiculo": "string"
+    }
+  ]
 }
 ```
-
-
-## Rodando os testes
-
-Para rodar os testes, rode o seguinte comando
-
-```bash
-  npm run test
-```
-
